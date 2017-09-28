@@ -48,7 +48,7 @@
  * Enable wlan connection, start easylink configuration if no wlan settings are existed */
 //#define MICO_WLAN_CONNECTION_ENABLE
 
-#define MICO_WLAN_CONFIG_MODE CONFIG_MODE_SOFTAP
+#define MICO_WLAN_CONFIG_MODE  CONFIG_MODE_EASYLINK_WITH_SOFTAP
 
 #define EasyLink_TimeOut                60000 /**< EasyLink timeout 60 seconds. */
 
@@ -61,17 +61,17 @@
 
 /************************************************************************
  * Command line interface */
-//#define MICO_CLI_ENABLE
+#define MICO_CLI_ENABLE
 
 /************************************************************************
  * Start a system monitor daemon, application can register some monitor  
  * points, If one of these points is not executed in a predefined period, 
  * a watchdog reset will occur. */
-//#define MICO_SYSTEM_MONITOR_ENABLE
+#define MICO_SYSTEM_MONITOR_ENABLE
 
 /************************************************************************
  * Add service _easylink._tcp._local. for discovery */
-//#define MICO_SYSTEM_DISCOVERY_ENABLE
+#define MICO_SYSTEM_DISCOVERY_ENABLE
 
 /************************************************************************
  * MiCO TCP server used for configuration and ota. */

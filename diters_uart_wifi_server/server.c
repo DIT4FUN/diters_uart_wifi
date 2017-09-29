@@ -244,7 +244,25 @@ void uartRecv_thread( mico_thread_arg_t inContext)
 }
 
 
-
+void micoNotify_WifiStatusHandler(int event, void* arg )
+{
+  (void)arg;
+  switch (event) {
+  case NOTIFY_STATION_UP:
+    break;
+  case NOTIFY_STATION_DOWN:
+    break;
+  case NOTIFY_AP_UP:
+      wifi_softap_log("AP up");
+    break;
+  case NOTIFY_AP_DOWN:
+      wifi_softap_log("AP down");
+    break;
+  default:
+    break;
+  }
+  return;
+}
 
 int application_start( void )
 {
@@ -257,36 +275,35 @@ int application_start( void )
     mico_Context_t* mico_context;
 
     /* Create application context */
-   // app_context = (app_context_t *) calloc( 1, sizeof(app_context_t) );
-    //require_action( app_context, exit, err = kNoMemoryErr );
+    app_context = (app_context_t *) calloc( 1, sizeof(app_context_t) );
+    require_action( app_context, exit, err = kNoMemoryErr );
 
     /* Create mico system context and read application's config data from flash */
-  //  mico_context = mico_system_context_init( sizeof(application_config_t) );
-  //  app_context->appConfig = mico_system_context_get_user_data( mico_context );
+    mico_context = mico_system_context_init( sizeof(application_config_t) );
+    app_context->appConfig = mico_system_context_get_user_data( mico_context );
 
     /* mico system initialize */
-  //  err = mico_system_init( mico_context );
-    err = mico_system_init(mico_system_context_init( 0 ) );
+    err = mico_system_init( mico_context );
     require_noerr( err, exit );
 
        /* Register user function when wlan connection status is changed */
-      // err = mico_system_notify_register( mico_notify_WIFI_STATUS_CHANGED, (void *)micoNotify_WifiStatusHandler, NULL );
-      // require_noerr( err, exit );
+      err = mico_system_notify_register( mico_notify_WIFI_STATUS_CHANGED, (void *)micoNotify_WifiStatusHandler, NULL );
+      require_noerr( err, exit );
 
        /* Protocol initialize */
-      // sppProtocolInit( app_context );
+      sppProtocolInit( app_context );
 
        /*UART receive thread*/
 
-      // uart_config.baud_rate = 115200;
-      // uart_config.data_width = DATA_WIDTH_8BIT;
-      // uart_config.parity = NO_PARITY;
-      // uart_config.stop_bits = STOP_BITS_1;
-      // uart_config.flow_control = FLOW_CONTROL_DISABLED;
-      // uart_config.flags = UART_WAKEUP_DISABLE;
+      uart_config.baud_rate = 115200;
+      uart_config.data_width = DATA_WIDTH_8BIT;
+      uart_config.parity = NO_PARITY;
+      uart_config.stop_bits = STOP_BITS_1;
+      uart_config.flow_control = FLOW_CONTROL_DISABLED;
+      uart_config.flags = UART_WAKEUP_DISABLE;
 
-       //ring_buffer_init( (ring_buffer_t *) &rx_buffer, (uint8_t *) rx_data, UART_BUFFER_LENGTH );
-      // MicoUartInitialize( UART_FOR_APP, &uart_config, (ring_buffer_t *) &rx_buffer );
+      ring_buffer_init( (ring_buffer_t *) &rx_buffer, (uint8_t *) rx_data, UART_BUFFER_LENGTH );
+      MicoUartInitialize( UART_FOR_APP, &uart_config, (ring_buffer_t *) &rx_buffer );
 
 
        /*ap*/
@@ -308,17 +325,17 @@ int application_start( void )
 
 
 
-       /*
+
        err = mico_rtos_create_thread( NULL, MICO_APPLICATION_PRIORITY, "UART Recv", uartRecv_thread,
                                                STACK_SIZE_UART_RECV_THREAD,  (mico_thread_arg_t)app_context );
        require_noerr_string( err, exit, "ERROR: Unable to start the uart recv thread.");
-        */
+
 
         /* Start TCP server listener thread*/
-       /*
+
        err = mico_rtos_create_thread( NULL, MICO_APPLICATION_PRIORITY, "TCP_server", tcp_server_thread,0x400,  (mico_thread_arg_t)app_context  );
        require_noerr_string( err, exit, "ERROR: Unable to start the tcp server thread." );
-        */
+
 
        exit:
        mico_rtos_delete_thread( NULL );

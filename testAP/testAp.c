@@ -26,8 +26,9 @@ int application_start( void )
   strcpy((char*)wNetConfig.dnsServer_ip_addr, "192.168.0.1");
   
   wifi_softap_log("ssid:%s  key:%s", wNetConfig.wifi_ssid, wNetConfig.wifi_key);\
-  micoWlanStart(&wNetConfig);
-
+  err = micoWlanStart(&wNetConfig);
+  wifi_softap_log("err = %d",err);
+  while(1);
 exit:  
   mico_rtos_delete_thread(NULL);
   return err;

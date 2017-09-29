@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 #define CONFIGURATION_VERSION               0x00000002 // if default configuration is changed, update this number
-#define MAX_QUEUE_NUM                       4  // 1 remote client, 5 local server
+#define MAX_QUEUE_NUM                       6  // 1 remote client, 5 local server
 #define MAX_QUEUE_LENGTH                    8  // each queue max 8 msg
 
 typedef struct _socket_msg {

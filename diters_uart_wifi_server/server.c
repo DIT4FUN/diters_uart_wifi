@@ -45,7 +45,7 @@ static char *ap_key = "ditersMxchip";
 #define SERVER_PORT 20000 /*set up a tcp server,port at 20000*/
 
 /* Define thread stack size */
-#define STACK_SIZE_UART_RECV_THREAD           0x2A0
+#define STACK_SIZE_UART_RECV_THREAD         0x2A0
 #define wlanBufferLen                       1024
 #define UART_RECV_TIMEOUT                   500
 #define UART_ONE_PACKAGE_LENGTH             1024
